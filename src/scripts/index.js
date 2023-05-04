@@ -25,5 +25,23 @@ function injectScripts() {
             lastCursorIndex = document.getElementById('exprText').selectionStart;
         }, 10);
     });
+    document.getElementById('negateBtn').addEventListener('click', () =>{
+        insertCharIntoExpr('~');
+    });
+    document.getElementById('andBtn').addEventListener('click', () =>{
+        insertCharIntoExpr(Operations.And.description);
+    });
+    document.getElementById('orBtn').addEventListener('click', () => {
+        insertCharIntoExpr(Operations.Or.description);
+    });
+    document.getElementById('ifBtn').addEventListener('click', () => {
+        insertCharIntoExpr(Operations.If.description);
+    });
+    document.getElementById('iffBtn', () => {
+        insertCharIntoExpr(Operations.Iff.description);
+    });
 }
 
+function insertCharIntoExpr(char){
+    alert(char);
+}
