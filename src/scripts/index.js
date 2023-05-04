@@ -26,28 +26,9 @@ function injectScripts() {
         }, 10);
     });
 
+    /** Sets up the expression verification button. */
     document.getElementById('verifyBtn').addEventListener('click', () => {
-        // console.log('starting verification')
-        let userInput = document.getElementById('exprText').value;
-        let preCount = 0;
-        let postCount = 0;
-        for (let index = 0; index < userInput.length; index++) {
-            if(userInput.charAt(index) == '('){
-                preCount++;
-                continue;
-            }            
-            if(userInput.charAt(index) == ')'){
-                postCount++;
-                continue;
-            }
-            if(legalCharDict.indexOf(userInput.charAt(index)) == -1){
-                alert(`\"${userInput.charAt(index)}\" is not a legal character`);
-                return;
-            }
-        }      
-        if(preCount != postCount){
-            alert("Mistmatched Parenthesis");
-        }
+        verifyUserInput();
     });
 
     /** Handles inserting special characters into the expression. */
@@ -68,12 +49,47 @@ function injectScripts() {
     });
 }
 
+/** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
+function verifyUserInput() {
+    let userInput = document.getElementById('exprText').value;
+    let preCount = 0;
+    let postCount = 0;
+    for (let index = 0; index < userInput.length; index++) {
+        if(userInput.charAt(index) == '('){
+            preCount++;
+            continue;
+        }            
+            }            
+        }            
+        if(userInput.charAt(index) == ')'){
+            postCount++;
+            continue;
+        }
+        if(legalCharDict.indexOf(userInput.charAt(index)) == -1){
+            alert(`\"${userInput.charAt(index)}\" is not a legal character`);
+            return;
+        }
+    }      
+        }      
+    }      
+    if(preCount != postCount){
+        alert("Mistmatched Parenthesis");
+    } else {
+        legalExpression = true;
+    }
+    updateAppState();
+}
+
 /** Function to insert a character into the expression at the last location of the cursor. */
 function insertCharIntoExpr(char) {
     document.getElementById('exprText').value = document.getElementById('exprText').value.substring(0, lastCursorIndex) + char + document.getElementById('exprText').value.substring(lastCursorIndex);
     lastCursorIndex++;
 }
 
+/** Function to alter UI elements based on interal flags. */
+function updateAppState(){
+
+}
 
 /**
  * This is an expression class.  It is composed of a left and right side (either expressions or propositions), 
