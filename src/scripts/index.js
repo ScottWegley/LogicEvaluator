@@ -60,6 +60,10 @@ function injectScripts() {
 
 /** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
 function verifyUserInput() {
+    /**Remove all spaces. */
+    while(document.getElementById('exprText').value.indexOf(" ") != -1){
+        document.getElementById('exprText').value = document.getElementById('exprText').value.replace(" ", "");
+    }
     let userInput = document.getElementById('exprText').value;
     let preCount = 0;
     let postCount = 0;
@@ -72,11 +76,13 @@ function verifyUserInput() {
             postCount++;
             continue;
         }
+        /** Check character against dictionary. */
         if(legalCharDict.indexOf(userInput.charAt(index)) == -1){
             alert(`\"${userInput.charAt(index)}\" is not a legal character`);
             return;
         }
-    }      
+    }
+    /** Check parenthesis count. */
     if(preCount != postCount){
         alert("Mistmatched Parenthesis");
     } else {
@@ -165,7 +171,7 @@ class Proposition {
     #value;
     #negated;
 
-    constructor(_symbol, _value, _negated = false) {
+    constructor(_symbol, _value = null, _negated = false) {
         this.#symbol = _symbol;
         this.#value = _value;
         this.#negated = _negated;
