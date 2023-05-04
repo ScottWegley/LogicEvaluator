@@ -25,6 +25,7 @@ function injectScripts() {
             lastCursorIndex = document.getElementById('exprText').selectionStart;
         }, 10);
     });
+
     document.getElementById('negateBtn').addEventListener('click', () =>{
         insertCharIntoExpr('~');
     });
@@ -44,4 +45,5 @@ function injectScripts() {
 
 function insertCharIntoExpr(char){
     alert(char);
+    document.getElementById('exprText').nodeValue = document.getElementById('exprText').nodeValue.substring(0,lastCursorIndex) + char + document.getElementById('exprText').nodeValue.substring(lastCursorIndex);
 }
