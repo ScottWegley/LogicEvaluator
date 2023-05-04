@@ -19,7 +19,7 @@ function injectScripts() {
     });
 
     /** Keep {@link lastCursorIndex} updated */
-    document.getElementById('exprText').addEventListener('keydown', (ev) => {
+    document.getElementById('exprText').addEventListener('selectionchange', () => {
         setTimeout(() => {
             lastCursorIndex = document.getElementById('exprText').selectionStart;
         }, 10);
