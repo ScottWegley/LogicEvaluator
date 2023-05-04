@@ -1,6 +1,7 @@
 /** The last recorded index of the cursor in our expression textbox */
 let lastCursorIndex = 0;
-
+/** A dictionary of legal character in our expressions. */
+let legalCharDict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ()~∧∨→↔";
 
 /**
  * Our main function.  Used to establish initial state of page and setup all other event listeners.
@@ -23,6 +24,30 @@ function injectScripts() {
         setTimeout(() => {
             lastCursorIndex = document.getElementById('exprText').selectionStart;
         }, 10);
+    });
+
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+        // console.log('starting verification')
+        let userInput = document.getElementById('exprText').value;
+        let preCount = 0;
+        let postCount = 0;
+        for (let index = 0; index < userInput.length; index++) {
+            if(userInput.charAt(index) == '('){
+                preCount++;
+                continue;
+            }            
+            if(userInput.charAt(index) == ')'){
+                postCount++;
+                continue;
+            }
+            if(legalCharDict.indexOf(userInput.charAt(index)) == -1){
+                alert(`\"${userInput.charAt(index)}\" is not a legal character`);
+                return;
+            }
+        }      
+        if(preCount != postCount){
+            alert("Mistmatched Parenthesis");
+        }
     });
 
     /** Handles inserting special characters into the expression. */
