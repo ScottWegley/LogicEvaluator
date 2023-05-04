@@ -25,6 +25,7 @@ function injectScripts() {
         }, 10);
     });
 
+    /** Handles inserting special characters into the expression. */
     document.getElementById('negateBtn').addEventListener('click', () => {
         insertCharIntoExpr('~');
     });
@@ -42,6 +43,7 @@ function injectScripts() {
     });
 }
 
+/** Function to insert a character into the expression at the last location of the cursor. */
 function insertCharIntoExpr(char) {
     document.getElementById('exprText').value = document.getElementById('exprText').value.substring(0, lastCursorIndex) + char + document.getElementById('exprText').value.substring(lastCursorIndex);
     lastCursorIndex++;
