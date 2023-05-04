@@ -49,7 +49,7 @@ class Expression {
 }
 
 /** Basically an enum that stores the four possible center operations. */
-const Operations = {
+export const Operations = {
     And: Symbol("∧"),
     Or: Symbol("∨"),
     If: Symbol("→"),
