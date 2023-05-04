@@ -93,7 +93,8 @@ function insertCharIntoExpr(char) {
 
 /** Function to alter UI elements based on interal flags. */
 function updateAppState(){
-
+    document.getElementById('genTTBtn').disabled = !legalExpression;
+    document.getElementById('pluginBtn').disabled = !legalExpression;
 }
 
 /**
