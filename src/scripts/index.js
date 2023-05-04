@@ -25,10 +25,10 @@ function injectScripts() {
         }, 10);
     });
 
-    document.getElementById('negateBtn').addEventListener('click', () =>{
+    document.getElementById('negateBtn').addEventListener('click', () => {
         insertCharIntoExpr('~');
     });
-    document.getElementById('andBtn').addEventListener('click', () =>{
+    document.getElementById('andBtn').addEventListener('click', () => {
         insertCharIntoExpr(Operations.And.description);
     });
     document.getElementById('orBtn').addEventListener('click', () => {
@@ -37,14 +37,14 @@ function injectScripts() {
     document.getElementById('ifBtn').addEventListener('click', () => {
         insertCharIntoExpr(Operations.If.description);
     });
-    document.getElementById('iffBtn', () => {
+    document.getElementById('iffBtn').addEventListener('click', () => {
         insertCharIntoExpr(Operations.Iff.description);
     });
 }
 
-function insertCharIntoExpr(char){
-    alert(char);
-    document.getElementById('exprText').nodeValue = document.getElementById('exprText').nodeValue.substring(0,lastCursorIndex) + char + document.getElementById('exprText').nodeValue.substring(lastCursorIndex);
+function insertCharIntoExpr(char) {
+    document.getElementById('exprText').value = document.getElementById('exprText').value.substring(0, lastCursorIndex) + char + document.getElementById('exprText').value.substring(lastCursorIndex);
+    lastCursorIndex++;
 }
 
 
@@ -85,7 +85,7 @@ class Expression {
                 break;
             case Operations.Iff:
                 let lResult = this.#leftExpr.evaluate();
-                let rResult = this.#rightExpr.evaluate();    
+                let rResult = this.#rightExpr.evaluate();
                 oResult = (!lResult || rResult) && (!rResult || lResult);
                 break;
         }
