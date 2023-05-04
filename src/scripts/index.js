@@ -9,7 +9,8 @@ let legalExpression = false;
  */
 window.addEventListener('load', () => {
     document.getElementById('exprText').value = "";
-
+    document.getElementById('genTTBtn').disabled = true;
+    document.getElementById('pluginBtn').disabled = true;
     injectScripts();
 });
 
@@ -28,7 +29,8 @@ function injectScripts() {
     });
 
     /** Mark new expressions as automatically illegal to require reverification. */
-    document.getElementById('exprText').addEventListener('change', () => {
+    document.getElementById('exprText').addEventListener('keydown', (ev) => {
+        if(ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey){ return; }
         legalExpression = false;
         updateAppState();
     });
