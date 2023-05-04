@@ -2,6 +2,7 @@
 let lastCursorIndex = 0;
 /** A dictionary of legal character in our expressions. */
 let legalCharDict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ()~∧∨→↔";
+let legalExpression = false;
 
 /**
  * Our main function.  Used to establish initial state of page and setup all other event listeners.
@@ -24,6 +25,12 @@ function injectScripts() {
         setTimeout(() => {
             lastCursorIndex = document.getElementById('exprText').selectionStart;
         }, 10);
+    });
+
+    /** Mark new expressions as automatically illegal to require reverification. */
+    document.getElementById('exprText').addEventListener('change', () => {
+        legalExpression = false;
+        updateAppState();
     });
 
     /** Sets up the expression verification button. */
@@ -59,8 +66,6 @@ function verifyUserInput() {
             preCount++;
             continue;
         }            
-            }            
-        }            
         if(userInput.charAt(index) == ')'){
             postCount++;
             continue;
@@ -69,8 +74,6 @@ function verifyUserInput() {
             alert(`\"${userInput.charAt(index)}\" is not a legal character`);
             return;
         }
-    }      
-        }      
     }      
     if(preCount != postCount){
         alert("Mistmatched Parenthesis");
