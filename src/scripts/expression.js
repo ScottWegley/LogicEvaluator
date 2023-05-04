@@ -22,20 +22,24 @@ class Expression {
 
     /** Returns the value of this expression. */
     evaluate() {
+        let oResult;
         switch (this.#operation) {
             case Operations.And:
-
+                oResult = this.#leftExpr.evaluate() && this.#rightExpr.evaluate();
                 break;
             case Operations.Of:
-
+                oResult = this.#leftExpr.evaluate() || this.#rightExpr.evaluate();
                 break;
             case Operations.If:
-
+                oResult = !this.#leftExpr.evaluate() || this.#rightExpr.evaluate();
                 break;
             case Operations.Iff:
-
+                let lResult = this.#leftExpr.evaluate();
+                let rResult = this.#rightExpr.evaluate();    
+                oResult = (!lResult || rResult) && (!rResult || lResult);
                 break;
         }
+        return (this.#negated ? !oResult : oResult);
     }
 
     /** Returns a string representation of an expression, enclosed by parenthesis. */
@@ -70,7 +74,7 @@ class Proposition {
 
     /** Returns the value of this proposition. */
     evaluate() {
-        return this.#value;
+        return (this.#negated ? !this.#value : this.#value);
     }
 
     /** Returns a string representation of the proposition. */
