@@ -6,7 +6,8 @@ let lastCursorIndex = 0;
  * Our main function.  Used to establish initial state of page and setup all other event listeners.
  */
 window.addEventListener('load', () => {
-    
+    document.getElementById('exprText').value = "";
+
     injectScripts();
 });
 
