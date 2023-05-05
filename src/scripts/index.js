@@ -71,14 +71,18 @@ function verifyUserInput() {
     let userInput = document.getElementById('exprText').value;
     let preCount = 0;
     let postCount = 0;
+    /** Regex expression to catch two consecutive letters or symbols. */
+    let regex = new RegExp(/[A-Za-z]{2,}|[~∧∨→↔]{2,}/);
+    
     for (let index = 0; index < userInput.length; index++) {
         if(userInput.charAt(index) == '('){
             preCount++;
-            continue;
         }            
-        if(userInput.charAt(index) == ')'){
+        else if(userInput.charAt(index) == ')'){
             postCount++;
-            continue;
+        }
+        if(postCount > preCount){
+            alert("Misplaced parenthesis.");
         }
         /** Check character against dictionary. */
         if(legalCharDict.indexOf(userInput.charAt(index)) == -1){
@@ -89,7 +93,10 @@ function verifyUserInput() {
     /** Check parenthesis count. */
     if(preCount != postCount){
         alert("Mistmatched Parenthesis");
-    } else {
+    } else if (regex.test(userInput)) {
+        alert("Cannot have consecutive symbols or consecutive letters.")
+    }
+    else {
         legalExpression = true;
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
     }
