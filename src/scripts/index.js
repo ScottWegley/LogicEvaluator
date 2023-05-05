@@ -34,20 +34,13 @@ function injectScripts() {
 
     /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
-        document.getElementById('exprText').setAttribute('size',document.getElementById('exprText').value.length);
-        setTimeout(() => {
-            checkCharacters();
-        }, 10);
+        document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
         if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
-        legalExpression = false;
-        document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
-        updateAppState();
+        setTimeout(() => {
+            verifyUserInput();
+        }, 10);
     });
 
-    /** Sets up the expression verification button. */
-    document.getElementById('verifyBtn').addEventListener('click', () => {
-        verifyUserInput();
-    });
 
     /** Handles inserting special characters into the expression. */
     document.getElementById('negateBtn').addEventListener('click', () => {
