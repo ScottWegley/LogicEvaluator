@@ -63,7 +63,7 @@ function injectScripts() {
 /** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
 function verifyUserInput() {
     encloseExpression();
-    checkCharacters(true);
+    checkCharacters();
     updateAppState();
 }
 
@@ -74,14 +74,14 @@ function encloseExpression() {
         return;
     }
     document.getElementById('exprText').value = `(${userInput})`;
-    document.getElementById('exprText').setAttribute('size',document.getElementById('exprText').value.length);
+    document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
     return;
 }
 
 /**
  * Checks the validity of the expression in terms of characters and character distribution.
  */
-function checkCharacters(toAlert = false) {
+function checkCharacters() {
     /**Remove all spaces. */
     while (document.getElementById('exprText').value.indexOf(" ") != -1) {
         document.getElementById('exprText').value = document.getElementById('exprText').value.replace(" ", "");
@@ -109,41 +109,31 @@ function checkCharacters(toAlert = false) {
         else if (symbols.indexOf(userInput.charAt(index)) != -1) {
             symbolCount++;
         } else {
-            if (toAlert) {
-                alert(`\"${userInput.charAt(index)}\" is an illegal character.`);
-                return;
-            }
+            appendError(ErrorType.IllegalCharError, userInput.charAt(index));
         }
         if (postCount > preCount) {
-            if (toAlert) {
-                alert("Misplaced parenthesis.");
-                return;
-            }
+            appendError(ErrorType.MisplacedParenthesis, index);
         }
     }
 
     /** Check parenthesis count. */
     if (preCount != postCount) {
-        if (toAlert) {
-            alert("Mistmatched Parenthesis");
-            return;
-        }
-    /** Check for repeating symbols or letters. */
+        appendError(ErrorType.MismatchedParenthesis);
+        /** Check for repeating symbols or letters. */
     } else if (regex.test(userInput)) {
-        if (toAlert) {
-            alert("Cannot have consecutive symbols or consecutive letters.");
-            return;
-        }
-    /** Check for proper distribution of symbols. */
+        appendError(ErrorType.ConsecutiveCharError);
+        /** Check for proper distribution of symbols. */
     } else if (2 * preCount < letterCount || letterCount - 1 != symbolCount) {
-        if (toAlert) {
-            alert("This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.")
-        }
-    }
-    else if (toAlert) {
+        appendError(ErrorType.MiscInvalidError);
+    } else {
         legalExpression = true;
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
+        while (document.getElementById("errorReportDiv").firstChild != null) {
+            document.getElementById("errorReportDiv").removeChild(document.getElementById("errorReportDiv").firstChild);
+        }
     }
+    document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
+}
 
 /**
  * Adds an error to the error div.
