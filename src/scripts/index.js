@@ -67,6 +67,7 @@ function verifyUserInput() {
     updateAppState();
 }
 
+/** Encloses the expression in parenthesis if it is not already enclosed */
 function encloseExpression() {
     let userInput = document.getElementById('exprText').value;
     if ((userInput.indexOf("(") == 0 || userInput.indexOf("~(") == 0) && userInput.lastIndexOf(")") == userInput.length - 1) {
@@ -78,8 +79,7 @@ function encloseExpression() {
 }
 
 /**
- * 
- * @param toAlert Whether or not this is being used in the context of validation.  If true, updates legality and alerts errors.
+ * Checks the validity of the expression in terms of characters and character distribution.
  */
 function checkCharacters(toAlert = false) {
     /**Remove all spaces. */
