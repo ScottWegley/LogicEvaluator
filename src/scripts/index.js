@@ -34,13 +34,14 @@ function injectScripts() {
 
     /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
+        document.getElementById('exprText').setAttribute('size',document.getElementById('exprText').value.length);
+        setTimeout(() => {
+            checkCharacters();
+        }, 10);
         if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
         legalExpression = false;
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
         updateAppState();
-        setTimeout(() => {
-            checkCharacters();
-        }, 10);
     });
 
     /** Sets up the expression verification button. */
