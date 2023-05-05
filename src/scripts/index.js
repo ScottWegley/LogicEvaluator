@@ -135,11 +135,13 @@ function checkCharacters(toAlert = false) {
             alert("Mistmatched Parenthesis");
             return;
         }
+    /** Check for repeating symbols or letters. */
     } else if (regex.test(userInput)) {
         if (toAlert) {
             alert("Cannot have consecutive symbols or consecutive letters.");
             return;
         }
+    /** Check for proper distribution of symbols. */
     } else if (2 * preCount < letterCount || letterCount - 1 != symbolCount) {
         if (toAlert) {
             alert("This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.")
