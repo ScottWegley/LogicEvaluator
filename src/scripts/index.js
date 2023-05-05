@@ -32,12 +32,15 @@ function injectScripts() {
         }, 10);
     });
 
-    /** Mark new expressions as automatically illegal to require reverification. */
+    /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
-        if(ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey){ return; }
+        if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
         legalExpression = false;
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
         updateAppState();
+        setTimeout(() => {
+            checkCharacters();
+        }, 10);
     });
 
     /** Sets up the expression verification button. */
@@ -145,10 +148,11 @@ function insertCharIntoExpr(char) {
     document.getElementById('exprText').value = document.getElementById('exprText').value.substring(0, lastCursorIndex) + char + document.getElementById('exprText').value.substring(lastCursorIndex);
     lastCursorIndex++;
     document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
+    document.getElementById('exprText').focus();
 }
 
 /** Function to alter UI elements based on interal flags. */
-function updateAppState(){
+function updateAppState() {
     document.getElementById('genTTBtn').disabled = !legalExpression;
     document.getElementById('pluginBtn').disabled = !legalExpression;
 }
