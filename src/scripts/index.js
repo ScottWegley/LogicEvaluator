@@ -69,8 +69,19 @@ function injectScripts() {
 
 /** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
 function verifyUserInput() {
+    encloseExpression();
     checkCharacters(true);
     updateAppState();
+}
+
+function encloseExpression() {
+    let userInput = document.getElementById('exprText').value;
+    if ((userInput.indexOf("(") == 0 || userInput.indexOf("~(") == 0) && userInput.lastIndexOf(")") == userInput.length - 1) {
+        return;
+    }
+    document.getElementById('exprText').value = `(${userInput})`;
+    document.getElementById('exprText').setAttribute('size',document.getElementById('exprText').value.length);
+    return;
 }
 
 /**
