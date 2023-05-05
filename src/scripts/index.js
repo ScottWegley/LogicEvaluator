@@ -65,43 +65,79 @@ function injectScripts() {
 
 /** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
 function verifyUserInput() {
+    checkCharacters(true);
+    updateAppState();
+}
+
+/**
+ * 
+ * @param toAlert Whether or not this is being used in the context of validation.  If true, updates legality and alerts errors.
+ */
+function checkCharacters(toAlert = false) {
     /**Remove all spaces. */
-    while(document.getElementById('exprText').value.indexOf(" ") != -1){
+    while (document.getElementById('exprText').value.indexOf(" ") != -1) {
         document.getElementById('exprText').value = document.getElementById('exprText').value.replace(" ", "");
     }
     let userInput = document.getElementById('exprText').value;
     let preCount = 0;
     let postCount = 0;
+    let letterCount = 0;
+    let symbolCount = 0;
     /** Regex expression to catch two consecutive letters or symbols. */
     let regex = new RegExp(/[A-Za-z]{2,}|[~∧∨→↔]{2,}/);
-    
     for (let index = 0; index < userInput.length; index++) {
-        if(userInput.charAt(index) == '('){
+        if (userInput.charAt(index) == '(') {
             preCount++;
-        }            
-        else if(userInput.charAt(index) == ')'){
+        }
+        else if (userInput.charAt(index) == ')') {
             postCount++;
         }
-        if(postCount > preCount){
-            alert("Misplaced parenthesis.");
+        else if(userInput.charAt(index) == '~'){
+            //dummy to skip next counts
         }
-        /** Check character against dictionary. */
-        if(legalCharDict.indexOf(userInput.charAt(index)) == -1){
-            alert(`\"${userInput.charAt(index)}\" is not a legal character`);
+        else if (alphabet.indexOf(userInput.charAt(index)) != -1) {
+            letterCount++;
+        }
+        else if (symbols.indexOf(userInput.charAt(index)) != -1) {
+            symbolCount++;
+        } else {
+            if (toAlert) {
+                alert(`\"${userInput.charAt(index)}\" is an illegal character.`);
+                return;
+            }
+        }
+        if (postCount > preCount) {
+            if (toAlert) {
+                alert("Misplaced parenthesis.");
+                return;
+            }
+        }
+    }
+
+    /** Check parenthesis count. */
+    if (preCount != postCount) {
+        if (toAlert) {
+            alert("Mistmatched Parenthesis");
             return;
         }
-    }
-    /** Check parenthesis count. */
-    if(preCount != postCount){
-        alert("Mistmatched Parenthesis");
     } else if (regex.test(userInput)) {
-        alert("Cannot have consecutive symbols or consecutive letters.")
+        if (toAlert) {
+            alert("Cannot have consecutive symbols or consecutive letters.");
+            return;
+        }
+    } else if (2*preCount < letterCount || letterCount - 1 != symbolCount) {
+        if(toAlert){
+            alert("This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.")
+        }
     }
-    else {
+    else if (toAlert) {
         legalExpression = true;
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
     }
-    updateAppState();
+
+    if (!toAlert) {
+        document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
+    }
 }
 
 /** Function to insert a character into the expression at the last location of the cursor. */
