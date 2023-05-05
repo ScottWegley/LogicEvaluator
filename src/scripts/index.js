@@ -1,7 +1,8 @@
 /** The last recorded index of the cursor in our expression textbox */
 let lastCursorIndex = 0;
 /** A dictionary of legal character in our expressions. */
-let legalCharDict = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ()~∧∨→↔";
+const alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";
+const symbols = "~∧∨→↔";
 /** A variable to keep track of the legality of whatever is in the expression textbox. */
 let legalExpression = false;
 
