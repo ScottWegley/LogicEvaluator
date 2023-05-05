@@ -145,8 +145,36 @@ function checkCharacters(toAlert = false) {
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
     }
 
-
-    document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
+/**
+ * Adds an error to the error div.
+ * @param {ErrorType} eType A {@link ErrorType} that determines the format of the error.
+ * @param {*} param An optional parameter that is variably inserted into the error text.
+ */
+function appendError(eType, param = '') {
+    legalExpression = false;
+    if (document.getElementById(eType.description) != null) { return; }
+    let newError = document.createElement("Label");
+    newError.setAttribute('id', eType.description);
+    switch (eType) {
+        case ErrorType.IllegalCharError:
+            newError.textContent = `\"${param}\" is an illegal character.`;
+            break;
+        case ErrorType.MisplacedParenthesis:
+            newError.textContent = `Misplaced Parenthesis at index ${param}`;
+            break;
+        case ErrorType.MismatchedParenthesis:
+            newError.textContent = `Parenthesis are mismatched somewhere in expression.`;
+            break;
+        case ErrorType.ConsecutiveCharError:
+            newError.textContent = `Cannot have consecutive symbols or consecutive letters.`;
+            break;
+        case ErrorType.MiscInvalidError:
+            newError.textContent = `This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.`;
+            break;
+    }
+    document.getElementById("errorReportDiv").appendChild(newError);
+    document.getElementById("errorReportDiv").appendChild(document.createElement("br"));
+}
 
 const ErrorType = {
     IllegalCharError: Symbol("illegalCharError"),
