@@ -34,20 +34,13 @@ function injectScripts() {
 
     /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
-        document.getElementById('exprText').setAttribute('size',document.getElementById('exprText').value.length);
-        setTimeout(() => {
-            checkCharacters();
-        }, 10);
+        document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
         if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
-        legalExpression = false;
-        document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
-        updateAppState();
+        setTimeout(() => {
+            verifyUserInput();
+        }, 10);
     });
 
-    /** Sets up the expression verification button. */
-    document.getElementById('verifyBtn').addEventListener('click', () => {
-        verifyUserInput();
-    });
 
     /** Handles inserting special characters into the expression. */
     document.getElementById('negateBtn').addEventListener('click', () => {
@@ -70,25 +63,25 @@ function injectScripts() {
 /** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
 function verifyUserInput() {
     encloseExpression();
-    checkCharacters(true);
+    checkCharacters();
     updateAppState();
 }
 
+/** Encloses the expression in parenthesis if it is not already enclosed */
 function encloseExpression() {
     let userInput = document.getElementById('exprText').value;
     if ((userInput.indexOf("(") == 0 || userInput.indexOf("~(") == 0) && userInput.lastIndexOf(")") == userInput.length - 1) {
         return;
     }
     document.getElementById('exprText').value = `(${userInput})`;
-    document.getElementById('exprText').setAttribute('size',document.getElementById('exprText').value.length);
+    document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
     return;
 }
 
 /**
- * 
- * @param toAlert Whether or not this is being used in the context of validation.  If true, updates legality and alerts errors.
+ * Checks the validity of the expression in terms of characters and character distribution.
  */
-function checkCharacters(toAlert = false) {
+function checkCharacters() {
     /**Remove all spaces. */
     while (document.getElementById('exprText').value.indexOf(" ") != -1) {
         document.getElementById('exprText').value = document.getElementById('exprText').value.replace(" ", "");
@@ -116,45 +109,69 @@ function checkCharacters(toAlert = false) {
         else if (symbols.indexOf(userInput.charAt(index)) != -1) {
             symbolCount++;
         } else {
-            if (toAlert) {
-                alert(`\"${userInput.charAt(index)}\" is an illegal character.`);
-                return;
-            }
+            appendError(ErrorType.IllegalCharError, userInput.charAt(index));
         }
         if (postCount > preCount) {
-            if (toAlert) {
-                alert("Misplaced parenthesis.");
-                return;
-            }
+            appendError(ErrorType.MisplacedParenthesis, index);
         }
     }
 
     /** Check parenthesis count. */
     if (preCount != postCount) {
-        if (toAlert) {
-            alert("Mistmatched Parenthesis");
-            return;
-        }
-    /** Check for repeating symbols or letters. */
+        appendError(ErrorType.MismatchedParenthesis);
+        /** Check for repeating symbols or letters. */
     } else if (regex.test(userInput)) {
-        if (toAlert) {
-            alert("Cannot have consecutive symbols or consecutive letters.");
-            return;
-        }
-    /** Check for proper distribution of symbols. */
+        appendError(ErrorType.ConsecutiveCharError);
+        /** Check for proper distribution of symbols. */
     } else if (2 * preCount < letterCount || letterCount - 1 != symbolCount) {
-        if (toAlert) {
-            alert("This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.")
-        }
-    }
-    else if (toAlert) {
+        appendError(ErrorType.MiscInvalidError);
+    } else {
         legalExpression = true;
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
+        while (document.getElementById("errorReportDiv").firstChild != null) {
+            document.getElementById("errorReportDiv").removeChild(document.getElementById("errorReportDiv").firstChild);
+        }
     }
-
-
     document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
+}
 
+/**
+ * Adds an error to the error div.
+ * @param {ErrorType} eType A {@link ErrorType} that determines the format of the error.
+ * @param {*} param An optional parameter that is variably inserted into the error text.
+ */
+function appendError(eType, param = '') {
+    legalExpression = false;
+    if (document.getElementById(eType.description) != null) { return; }
+    let newError = document.createElement("Label");
+    newError.setAttribute('id', eType.description);
+    switch (eType) {
+        case ErrorType.IllegalCharError:
+            newError.textContent = `\"${param}\" is an illegal character.`;
+            break;
+        case ErrorType.MisplacedParenthesis:
+            newError.textContent = `Misplaced Parenthesis at index ${param}`;
+            break;
+        case ErrorType.MismatchedParenthesis:
+            newError.textContent = `Parenthesis are mismatched somewhere in expression.`;
+            break;
+        case ErrorType.ConsecutiveCharError:
+            newError.textContent = `Cannot have consecutive symbols or consecutive letters.`;
+            break;
+        case ErrorType.MiscInvalidError:
+            newError.textContent = `This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.`;
+            break;
+    }
+    document.getElementById("errorReportDiv").appendChild(newError);
+    document.getElementById("errorReportDiv").appendChild(document.createElement("br"));
+}
+
+const ErrorType = {
+    IllegalCharError: Symbol("illegalCharError"),
+    MisplacedParenthesis: Symbol("misplaceParError"),
+    MismatchedParenthesis: Symbol("mismatchParError"),
+    ConsecutiveCharError: Symbol("consecCharError"),
+    MiscInvalidError: Symbol("miscInvalidError")
 }
 
 /** Function to insert a character into the expression at the last location of the cursor. */
@@ -163,6 +180,8 @@ function insertCharIntoExpr(char) {
     lastCursorIndex++;
     document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
     document.getElementById('exprText').focus();
+    document.getElementById('exprText').setSelectionRange(lastCursorIndex,lastCursorIndex);
+    verifyUserInput();
 }
 
 /** Function to alter UI elements based on interal flags. */
