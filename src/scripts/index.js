@@ -148,6 +148,12 @@ function checkCharacters(toAlert = false) {
 
     document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
 
+const ErrorType = {
+    IllegalCharError: Symbol("illegalCharError"),
+    MisplacedParenthesis: Symbol("misplaceParError"),
+    MismatchedParenthesis: Symbol("mismatchParError"),
+    ConsecutiveCharError: Symbol("consecCharError"),
+    MiscInvalidError: Symbol("miscInvalidError")
 }
 
 /** Function to insert a character into the expression at the last location of the cursor. */
