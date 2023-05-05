@@ -156,6 +156,8 @@ function insertCharIntoExpr(char) {
     lastCursorIndex++;
     document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
     document.getElementById('exprText').focus();
+    document.getElementById('exprText').setSelectionRange(lastCursorIndex,lastCursorIndex);
+    verifyUserInput();
 }
 
 /** Function to alter UI elements based on interal flags. */
