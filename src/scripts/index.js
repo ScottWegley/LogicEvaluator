@@ -1,13 +1,15 @@
 /** The last recorded index of the cursor in our expression textbox */
 let lastCursorIndex = 0;
 /** A dictionary of legal character in our expressions. */
-let legalCharDict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ()~∧∨→↔";
+let legalCharDict = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ()~∧∨→↔";
+/** A variable to keep track of the legality of whatever is in the expression textbox. */
 let legalExpression = false;
 
 /**
  * Our main function.  Used to establish initial state of page and setup all other event listeners.
  */
 window.addEventListener('load', () => {
+    console.log("Logic Evaluator: BACKEND LOADED");
     document.getElementById('exprText').value = "";
     document.getElementById('genTTBtn').disabled = true;
     document.getElementById('pluginBtn').disabled = true;
@@ -25,6 +27,7 @@ function injectScripts() {
     document.getElementById('exprText').addEventListener('selectionchange', () => {
         setTimeout(() => {
             lastCursorIndex = document.getElementById('exprText').selectionStart;
+            document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
         }, 10);
     });
 
@@ -32,6 +35,7 @@ function injectScripts() {
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
         if(ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey){ return; }
         legalExpression = false;
+        document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
         updateAppState();
     });
 
@@ -87,6 +91,7 @@ function verifyUserInput() {
         alert("Mistmatched Parenthesis");
     } else {
         legalExpression = true;
+        document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
     }
     updateAppState();
 }
@@ -95,6 +100,7 @@ function verifyUserInput() {
 function insertCharIntoExpr(char) {
     document.getElementById('exprText').value = document.getElementById('exprText').value.substring(0, lastCursorIndex) + char + document.getElementById('exprText').value.substring(lastCursorIndex);
     lastCursorIndex++;
+    document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
 }
 
 /** Function to alter UI elements based on interal flags. */
