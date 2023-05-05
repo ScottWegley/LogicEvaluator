@@ -87,7 +87,7 @@ function checkCharacters(toAlert = false) {
     let letterCount = 0;
     let symbolCount = 0;
     /** Regex expression to catch two consecutive letters or symbols. */
-    let regex = new RegExp(/[A-Za-z]{2,}|[~∧∨→↔]{2,}/);
+    let regex = new RegExp(/[A-Za-z]{2,}|[∧∨→↔]{2,}/);
     for (let index = 0; index < userInput.length; index++) {
         if (userInput.charAt(index) == '(') {
             preCount++;
@@ -95,7 +95,7 @@ function checkCharacters(toAlert = false) {
         else if (userInput.charAt(index) == ')') {
             postCount++;
         }
-        else if(userInput.charAt(index) == '~'){
+        else if (userInput.charAt(index) == '~') {
             //dummy to skip next counts
         }
         else if (alphabet.indexOf(userInput.charAt(index)) != -1) {
@@ -128,8 +128,8 @@ function checkCharacters(toAlert = false) {
             alert("Cannot have consecutive symbols or consecutive letters.");
             return;
         }
-    } else if (2*preCount < letterCount || letterCount - 1 != symbolCount) {
-        if(toAlert){
+    } else if (2 * preCount < letterCount || letterCount - 1 != symbolCount) {
+        if (toAlert) {
             alert("This expression is invalid.  Double check your parenthesis placement and make sure you don't have extra symbols.")
         }
     }
@@ -138,9 +138,9 @@ function checkCharacters(toAlert = false) {
         document.getElementById('legalityLbl').textContent = "Legal: " + legalExpression.toString();
     }
 
-    if (!toAlert) {
-        document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
-    }
+
+    document.getElementById('charStatsLbl').textContent = `Pre: ${preCount} Post: ${postCount} Ltrs: ${letterCount} Symb: ${symbolCount}`;
+
 }
 
 /** Function to insert a character into the expression at the last location of the cursor. */
