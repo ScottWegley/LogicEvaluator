@@ -207,6 +207,22 @@ function generateExpression() {
     document.getElementById('curExprLbl').textContent = `Expr: ${currentExpression.toString()}`
 }
 
+/** Function to generate the plugin table for the current expression. */
+function generatePluginTable() {
+    let props = [];
+    let stack = [currentExpression];
+    while(stack.length > 0){
+        let head = stack.shift();
+        if(!(head instanceof Proposition)){
+            stack.push(head.getLeft());
+            stack.push(head.getRight());
+        } else {
+            props.push(head.getSymbol());
+        }
+    }
+    console.log(props);
+}
+
 /**
  * This is an expression class.  It is composed of a left and right side (either {@link Expression}s or {@link Proposition}s), 
  * the {@link Operation} between them, and whether or not the expression is negated.
