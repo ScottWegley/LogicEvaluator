@@ -330,7 +330,7 @@ class Expression {
 }
 
 /** Basically an enum that stores the four possible center operations. */
-const Operations = {
+const Operation = {
     And: Symbol("∧"),
     Or: Symbol("∨"),
     If: Symbol("→"),
@@ -347,10 +347,9 @@ class Proposition {
     #value;
     #negated;
 
-    constructor(_symbol, _value = null, _negated = false) {
-        this.#symbol = _symbol;
-        this.#value = _value;
-        this.#negated = _negated;
+    constructor(_expr) {
+        this.#negated = (_expr.charAt(0) == '~');
+        this.#symbol = _expr.charAt(this.#negated ? 1 : 0);
     }
 
     /** Returns the value of this proposition. */
