@@ -337,6 +337,16 @@ class Expression {
     toString() {
         return (this.#negated ? "~" : "") + "(" + this.#leftExpr.toString() + this.#operation.description + this.#rightExpr.toString() + ")";
     }
+
+    /** Allow access to the left side of the expression. */
+    getLeft(){
+        return this.#leftExpr;
+    }
+
+    /** Allow access to the right side of the expression. */
+    getRight(){
+        return this.#rightExpr;
+    }
 }
 
 /** Basically an enum that stores the four possible center operations. */
@@ -356,6 +366,7 @@ class Proposition {
     #symbol;
     #value;
     #negated;
+    testField = 22;
 
     constructor(_expr) {
         this.#negated = (_expr.charAt(0) == '~');
@@ -370,5 +381,10 @@ class Proposition {
     /** Returns a string representation of the proposition. */
     toString() {
         return (this.#negated ? "~" : "") + this.#symbol;
+    }
+
+    /** Returns the symbol representation of this proposition. */
+    getSymbol() {
+        return this.#symbol;
     }
 }
