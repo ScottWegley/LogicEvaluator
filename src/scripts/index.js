@@ -216,6 +216,30 @@ class Expression {
 
     constructor(_preIndex, _postIndex, _expr, _negated) {
         this.#negated = _negated;
+        let startIndex = _preIndex + 1;
+        let endIndex = _postIndex;
+        let expr = _expr.substring(startIndex, endIndex);
+        let preArr = [];
+        let postArr = [];
+        for (let i = 0; i < expr.length; i++) {
+            if (expr.charAt(i) == '(') {
+                preArr[preArr.length] = i;
+            }
+        }
+
+        preArr.reverse();
+        preArr.forEach((preI) => {
+            for (let i = preI + 1; i < expr.length; i++) {
+                if (expr.charAt(i) == ")") {
+                    if (!postArr.includes(i)) {
+                        postArr[postArr.length] = i;
+                        break;
+                    }
+                }
+            }
+        });
+        preArr.reverse();
+        postArr.reverse();
     }
 
     /** Returns the value of this expression. */
