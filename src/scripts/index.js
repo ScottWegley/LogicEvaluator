@@ -15,7 +15,7 @@ window.addEventListener('load', () => {
     console.log("Logic Evaluator: BACKEND LOADED");
     document.getElementById('exprText').value = "";
     document.getElementById('genTTBtn').disabled = true;
-    document.getElementById('pluginBtn').disabled = true;
+    document.getElementById('plugInBtn').disabled = true;
     document.getElementById('exprText').value = "()";
     injectScripts();
 });
@@ -47,8 +47,8 @@ function injectScripts() {
         document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length + 5);
     });
 
-    document.getElementById('pluginBtn').addEventListener('click', () => {
-        generatePluginTable();
+    document.getElementById('plugInBtn').addEventListener('click', () => {
+        generatePlugInTable();
     });
 
     /** Handles inserting special characters into the expression. */
@@ -196,7 +196,7 @@ function insertCharIntoExpr(char) {
 /** Function to alter UI elements based on interal flags. */
 function updateAppState() {
     document.getElementById('genTTBtn').disabled = !legalExpression;
-    document.getElementById('pluginBtn').disabled = !legalExpression;
+    document.getElementById('plugInBtn').disabled = !legalExpression;
 }
 
 /** Function to scan the expression for all the pairings. */
@@ -207,8 +207,8 @@ function generateExpression() {
     document.getElementById('curExprLbl').textContent = `Expr: ${currentExpression.toString()}`
 }
 
-/** Function to generate the plugin table for the current expression. */
-function generatePluginTable() {
+/** Function to generate the plug-in table for the current expression. */
+function generatePlugInTable() {
     let props = [];
     let stack = [currentExpression];
     while(stack.length > 0){
