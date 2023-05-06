@@ -16,6 +16,7 @@ window.addEventListener('load', () => {
     document.getElementById('exprText').value = "";
     document.getElementById('genTTBtn').disabled = true;
     document.getElementById('pluginBtn').disabled = true;
+    document.getElementById('exprText').value = "()";
     injectScripts();
 });
 
