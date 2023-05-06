@@ -40,6 +40,9 @@ function injectScripts() {
         // if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
         setTimeout(() => {
             verifyUserInput();
+            if(legalExpression){
+                generateExpression();
+            }
         }, 10);
         document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length+5);
     });
