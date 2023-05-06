@@ -240,6 +240,39 @@ class Expression {
         });
         preArr.reverse();
         postArr.reverse();
+        let operationIndex = -1;
+
+        for (let i = 0; i < expr.length; i++) {
+            if (symbols.substring(1, symbols.length).indexOf(expr.charAt(i)) != -1) {
+                let tooDeep = false;
+                for (let j = 0; j < preArr.length; j++) {
+                    if (i > preArr[j] && i < postArr[j]) {
+                        tooDeep = true;
+                    }
+                    if (tooDeep) {
+                        break;
+                    }
+                }
+                if (!tooDeep) {
+                    operationIndex = i;
+                    switch (expr.charAt(i)) {
+                        case "∧":
+                            this.#operation = Operation.And;
+                            break;
+                        case "∨":
+                            this.#operation = Operation.Or;
+                            break;
+                        case "→":
+                            this.#operation = Operation.If;
+                            break;
+                        case "↔":
+                            this.#operation = Operation.Iff;
+                            break;
+                    }
+                }
+            }
+            if (!this.#operation == undefined) { break; }
+        }
     }
 
     /** Returns the value of this expression. */
