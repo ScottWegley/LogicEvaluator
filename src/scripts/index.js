@@ -190,6 +190,14 @@ function updateAppState() {
     document.getElementById('pluginBtn').disabled = !legalExpression;
 }
 
+/** Function to scan the expression for all the pairings. */
+function generateExpression() {
+    let userInput = document.getElementById('exprText').value;
+    currentExpression = new Expression((userInput.charAt(0) == '~' ? 1 : 0), userInput.length - 1, userInput,userInput.charAt(0) == '~');
+
+    document.getElementById('curExprLbl').textContent = `Expr: ${currentExpression.toString()}`
+}
+
 /**
  * This is an expression class.  It is composed of a left and right side (either {@link Expression}s or {@link Proposition}s), 
  * the {@link Operation} between them, and whether or not the expression is negated.
