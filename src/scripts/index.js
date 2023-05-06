@@ -5,6 +5,8 @@ const alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";
 const symbols = "~∧∨→↔";
 /** A variable to keep track of the legality of whatever is in the expression textbox. */
 let legalExpression = false;
+/** This will store the last legal expression in the form of my {@link Expression} class. */
+let currentExpression;
 
 /**
  * Our main function.  Used to establish initial state of page and setup all other event listeners.
