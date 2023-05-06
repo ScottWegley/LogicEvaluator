@@ -40,15 +40,15 @@ function injectScripts() {
         // if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
         setTimeout(() => {
             verifyUserInput();
-            if(legalExpression){
+            if (legalExpression) {
                 generateExpression();
             }
         }, 10);
-        document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length+5);
+        document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length + 5);
     });
 
     document.getElementById('pluginBtn').addEventListener('click', () => {
-
+        generatePluginTable();
     });
 
     /** Handles inserting special characters into the expression. */
@@ -202,7 +202,7 @@ function updateAppState() {
 /** Function to scan the expression for all the pairings. */
 function generateExpression() {
     let userInput = document.getElementById('exprText').value;
-    currentExpression = new Expression((userInput.charAt(0) == '~' ? 1 : 0), userInput.length - 1, userInput,userInput.charAt(0) == '~');
+    currentExpression = new Expression((userInput.charAt(0) == '~' ? 1 : 0), userInput.length - 1, userInput, userInput.charAt(0) == '~');
 
     document.getElementById('curExprLbl').textContent = `Expr: ${currentExpression.toString()}`
 }
@@ -237,7 +237,6 @@ class Expression {
     #operation;
     /** Whether or not the expression is negated. */
     #negated;
-
 
     constructor(_preIndex, _postIndex, _expr, _negated) {
         this.#negated = _negated;
@@ -306,7 +305,7 @@ class Expression {
                 leftIsProp = false;
             }
             if (!leftIsProp) {
-                this.#leftExpr = new Expression((expr.charAt(0) == '~'?1:0), operationIndex-1, expr,expr.charAt(0) == '~');
+                this.#leftExpr = new Expression((expr.charAt(0) == '~' ? 1 : 0), operationIndex - 1, expr, expr.charAt(0) == '~');
                 break;
             }
         }
@@ -318,7 +317,7 @@ class Expression {
                 rightIsProp = false;
             }
             if (!rightIsProp) {
-                this.#rightExpr = new Expression((expr.charAt(operationIndex + 1) == '~'?operationIndex + 2:operationIndex + 1), expr.length - 1, expr,expr.charAt(operationIndex + 1) == '~');
+                this.#rightExpr = new Expression((expr.charAt(operationIndex + 1) == '~' ? operationIndex + 2 : operationIndex + 1), expr.length - 1, expr, expr.charAt(operationIndex + 1) == '~');
                 break;
             }
         }
