@@ -34,11 +34,11 @@ function injectScripts() {
 
     /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
-        document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
-        if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
+        // if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
         setTimeout(() => {
             verifyUserInput();
         }, 10);
+        document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length+5);
     });
 
 
