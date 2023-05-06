@@ -325,7 +325,7 @@ class Expression {
 
     /** Returns a string representation of an expression, enclosed by parenthesis. */
     toString() {
-        return (this.#negated ? "~" : "") + + "(" + this.#leftExpr.toString() + this.#operation.toString() + this.#rightExpr.toString() + ")";
+        return (this.#negated ? "~" : "") + "(" + this.#leftExpr.toString() + this.#operation.description + this.#rightExpr.toString() + ")";
     }
 }
 
