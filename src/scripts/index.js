@@ -273,6 +273,20 @@ class Expression {
             }
             if (!this.#operation == undefined) { break; }
         }
+        let leftIsProp = true;
+        let rightIsProp = true;
+        for (let i = 0; i < operationIndex; i++) {
+            if (symbols.substring(1, symbols.length).indexOf(expr.charAt(i)) != -1) {
+                leftIsProp = false;
+            }
+            if (!leftIsProp) {
+                this.#leftExpr = new Expression((expr.charAt(0) == '~'?1:0), operationIndex-1, expr,expr.charAt(0) == '~');
+                break;
+            }
+        }
+        if (leftIsProp) {
+            this.#leftExpr = new Proposition(expr.substring(0, operationIndex));
+        }
     }
 
     /** Returns the value of this expression. */
