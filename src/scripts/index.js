@@ -191,8 +191,8 @@ function updateAppState() {
 }
 
 /**
- * This is an expression class.  It is composed of a left and right side (either expressions or propositions), 
- * the operation between them, and whether or not the expression is negated.
+ * This is an expression class.  It is composed of a left and right side (either {@link Expression}s or {@link Proposition}s), 
+ * the {@link Operation} between them, and whether or not the expression is negated.
  */
 class Expression {
 
@@ -205,10 +205,8 @@ class Expression {
     /** Whether or not the expression is negated. */
     #negated;
 
-    constructor(_leftExpr, _rightExpr, _operation, _negated = false) {
-        this.#leftExpr = _leftExpr;
-        this.#rightExpr = _rightExpr;
-        this.#operation = _operation;
+
+    constructor(_preIndex, _postIndex, _expr, _negated) {
         this.#negated = _negated;
     }
 
