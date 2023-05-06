@@ -287,6 +287,18 @@ class Expression {
         if (leftIsProp) {
             this.#leftExpr = new Proposition(expr.substring(0, operationIndex));
         }
+        for (let i = operationIndex + 1; i < expr.length; i++) {
+            if (symbols.substring(1, symbols.length).indexOf(expr.charAt(i)) != -1) {
+                rightIsProp = false;
+            }
+            if (!rightIsProp) {
+                this.#rightExpr = new Expression((expr.charAt(operationIndex + 1) == '~'?operationIndex + 2:operationIndex + 1), expr.length - 1, expr,expr.charAt(operationIndex + 1) == '~');
+                break;
+            }
+        }
+        if (rightIsProp) {
+            this.#rightExpr = new Proposition(expr.substring(operationIndex + 1, expr.length));
+        }
     }
 
     /** Returns the value of this expression. */
