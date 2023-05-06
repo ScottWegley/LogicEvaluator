@@ -47,22 +47,25 @@ function injectScripts() {
         document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length+5);
     });
 
+    document.getElementById('pluginBtn').addEventListener('click', () => {
+
+    });
 
     /** Handles inserting special characters into the expression. */
     document.getElementById('negateBtn').addEventListener('click', () => {
         insertCharIntoExpr('~');
     });
     document.getElementById('andBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operations.And.description);
+        insertCharIntoExpr(Operation.And.description);
     });
     document.getElementById('orBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operations.Or.description);
+        insertCharIntoExpr(Operation.Or.description);
     });
     document.getElementById('ifBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operations.If.description);
+        insertCharIntoExpr(Operation.If.description);
     });
     document.getElementById('iffBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operations.Iff.description);
+        insertCharIntoExpr(Operation.Iff.description);
     });
 }
 
@@ -186,7 +189,7 @@ function insertCharIntoExpr(char) {
     lastCursorIndex++;
     document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
     document.getElementById('exprText').focus();
-    document.getElementById('exprText').setSelectionRange(lastCursorIndex,lastCursorIndex);
+    document.getElementById('exprText').setSelectionRange(lastCursorIndex, lastCursorIndex);
     verifyUserInput();
 }
 
@@ -279,6 +282,7 @@ class Expression {
             }
             if (!this.#operation == undefined) { break; }
         }
+
         let leftIsProp = true;
         let rightIsProp = true;
         for (let i = 0; i < operationIndex; i++) {
@@ -311,16 +315,16 @@ class Expression {
     evaluate() {
         let oResult;
         switch (this.#operation) {
-            case Operations.And:
+            case Operation.And:
                 oResult = this.#leftExpr.evaluate() && this.#rightExpr.evaluate();
                 break;
-            case Operations.Of:
+            case Operation.Of:
                 oResult = this.#leftExpr.evaluate() || this.#rightExpr.evaluate();
                 break;
-            case Operations.If:
+            case Operation.If:
                 oResult = !this.#leftExpr.evaluate() || this.#rightExpr.evaluate();
                 break;
-            case Operations.Iff:
+            case Operation.Iff:
                 let lResult = this.#leftExpr.evaluate();
                 let rResult = this.#rightExpr.evaluate();
                 oResult = (!lResult || rResult) && (!rResult || lResult);
