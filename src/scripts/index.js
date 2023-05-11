@@ -333,7 +333,7 @@ class Expression {
             case Operation.And:
                 oResult = this.#leftExpr.evaluate() && this.#rightExpr.evaluate();
                 break;
-            case Operation.Of:
+            case Operation.Or:
                 oResult = this.#leftExpr.evaluate() || this.#rightExpr.evaluate();
                 break;
             case Operation.If:
@@ -354,12 +354,12 @@ class Expression {
     }
 
     /** Allow access to the left side of the expression. */
-    getLeft(){
+    getLeft() {
         return this.#leftExpr;
     }
 
     /** Allow access to the right side of the expression. */
-    getRight(){
+    getRight() {
         return this.#rightExpr;
     }
 }
@@ -401,5 +401,9 @@ class Proposition {
     /** Returns the symbol representation of this proposition. */
     getSymbol() {
         return this.#symbol;
+    }
+
+    setValue(val){
+        this.#value = val;
     }
 }
