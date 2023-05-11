@@ -210,17 +210,64 @@ function generateExpression() {
 /** Function to generate the plug-in table for the current expression. */
 function generatePlugInTable() {
     let props = [];
+    let exprs = [];
     let stack = [currentExpression];
-    while(stack.length > 0){
+    while (stack.length > 0) {
         let head = stack.shift();
-        if(!(head instanceof Proposition)){
+        if (!(head instanceof Proposition)) {
             stack.push(head.getLeft());
             stack.push(head.getRight());
+            exprs.push(head);
         } else {
-            props.push(head.getSymbol());
+            props.push(head);
         }
     }
-    console.log(props);
+    while (document.getElementById('pluginValDiv').firstChild != null) {
+        document.getElementById('pluginValDiv').removeChild(document.getElementById('pluginValDiv').firstChild)
+    }
+    let newTable = document.createElement('table');
+    newTable.setAttribute('id', 'pluginTable');
+    newTable.appendChild(document.createElement('tr'));
+    newTable.appendChild(document.createElement('tr'));
+    props.forEach((prop) => {
+        let header = document.createElement('th');
+        header.textContent = prop.getSymbol();
+        newTable.firstChild.appendChild(header);
+        let input = document.createElement('input');
+        input.setAttribute('type', 'checkbox');
+        input.setAttribute('id', 'pluginInputFor' + prop.getSymbol());
+        let data = document.createElement('td');
+        data.appendChild(input);
+        newTable.childNodes[1].appendChild(data);
+    });
+    exprs.reverse();
+    let i = 0;
+    exprs.forEach((expr) => {
+        let header = document.createElement('th');
+        header.textContent = expr.toString();
+        newTable.firstChild.appendChild(header);
+        let data = document.createElement('td');
+        let content = document.createElement('p');
+        content.setAttribute('id', 'pluginExprDisplay' + i);
+        data.appendChild(content);
+        newTable.childNodes[1].appendChild(data);
+        i++;
+    });
+    document.getElementById('pluginValDiv').appendChild(newTable);
+    let evaluateButton = document.createElement("button");
+    evaluateButton.textContent = "Evaluate";
+    evaluateButton.addEventListener('click', () => {
+        props.forEach((prop) => {
+            let value = document.getElementById(`pluginInputFor${prop.getSymbol()}`).checked;
+            prop.setValue(value == true);
+        });
+        let i = 0;
+        exprs.forEach((expr) => {
+            document.getElementById(`pluginExprDisplay${i}`).textContent = expr.evaluate();
+            i++;
+        });
+    });
+    document.getElementById('pluginValDiv').appendChild(evaluateButton);
 }
 
 /**
