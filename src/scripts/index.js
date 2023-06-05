@@ -107,6 +107,7 @@ function checkCharacters() {
     let symbolCount = 0;
     /** Regex expression to catch two consecutive letters or symbols. */
     let regex = new RegExp(/[A-Za-z]{2,}|[∧∨→↔]{2,}/);
+    let wrappedProp = new RegExp(/[(][A-Za-z][)]/);
     for (let index = 0; index < userInput.length; index++) {
         if (userInput.charAt(index) == '(') {
             preCount++;
@@ -137,7 +138,7 @@ function checkCharacters() {
     } else if (regex.test(userInput)) {
         appendError(ErrorType.ConsecutiveCharError);
         /** Check for proper distribution of symbols. */
-    } else if (2 * preCount < letterCount || letterCount - 1 != symbolCount) {
+    } else if (2 * preCount < letterCount || letterCount - 1 != symbolCount || wrappedProp.test(userInput)) {
         appendError(ErrorType.MiscInvalidError);
     } else {
         legalExpression = true;
