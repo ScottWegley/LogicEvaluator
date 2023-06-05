@@ -353,7 +353,7 @@ function generatePlugInTable() {
     evaluateButton.addEventListener('click', () => {
         props.forEach((prop) => {
             let value = document.getElementById(`pluginInputFor${prop.getSymbol()}`).checked;
-            prop.setValue(value == true);
+            prop.setValue(value);
         });
         let i = 0;
         exprs.forEach((expr) => {
@@ -544,7 +544,7 @@ class Proposition {
         return this.#symbol;
     }
 
-    setValue(val){
+    setValue(val) {
         this.#value = val;
     }
 }
