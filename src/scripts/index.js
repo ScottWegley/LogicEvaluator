@@ -82,7 +82,12 @@ function encloseExpression() {
     if ((userInput.indexOf("(") == 0 || userInput.indexOf("~(") == 0) && userInput.lastIndexOf(")") == userInput.length - 1) {
         return;
     }
-    document.getElementById('exprText').value = `(${userInput})`;
+    if (userInput.charAt(userInput.length - 1) != ')') {
+        document.getElementById('exprText').value = `${userInput})`;
+    }
+    if (userInput.charAt(0) != '(' || userInput.charAt(0) != '~') {
+        document.getElementById('exprText').value = `(${userInput}`;
+    }
     document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
     return;
 }
