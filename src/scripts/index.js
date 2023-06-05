@@ -37,7 +37,6 @@ function injectScripts() {
 
     /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
-        // if (ev.key == "ArrowDown" || ev.key == "ArrowLeft" || ev.key == "ArrowUp" || ev.key == "ArrowRight" || ev.ctrlKey) { return; }
         setTimeout(() => {
             verifyUserInput();
             if (legalExpression) {
@@ -45,6 +44,10 @@ function injectScripts() {
             }
         }, 10);
         document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length + 5);
+    });
+
+    document.getElementById('genTTBtn').addEventListener('click', () => {
+        generateTruthTable();
     });
 
     document.getElementById('plugInBtn').addEventListener('click', () => {
@@ -213,6 +216,66 @@ function generateExpression() {
     document.getElementById('curExprLbl').textContent = `Expr: ${currentExpression.toString()}`
 }
 
+/** Function to generate the truth table for the current expression. */
+function generateTruthTable() {
+    while (document.getElementById('pluginValDiv').firstChild != null) {
+        document.getElementById('pluginValDiv').removeChild(document.getElementById('pluginValDiv').firstChild);
+    }
+    while (document.getElementById('truthTableDiv').firstChild != null) {
+        document.getElementById('truthTableDiv').removeChild(document.getElementById('truthTableDiv').firstChild);
+    }
+    let props = [];
+    let exprs = [];
+    let stack = [currentExpression];
+    while (stack.length > 0) {
+        let head = stack.shift();
+        if (!(head instanceof Proposition)) {
+            stack.push(head.getLeft());
+            stack.push(head.getRight());
+            exprs.push(head);
+        } else {
+            props.push(head);
+        }
+    }
+    let newTable = document.createElement('table');
+    newTable.setAttribute('id', 'truthTable');
+    newTable.appendChild(document.createElement('tr'));
+    for (let i = 0; i < Math.pow(2, props.length); i++) {
+        newTable.appendChild(document.createElement('tr'));
+    }
+    props.forEach((prop) => {
+        let header = document.createElement('th');
+        header.textContent = prop.getSymbol();
+        newTable.firstChild.appendChild(header);
+        for (let i = 0; i < Math.pow(2, props.length); i++) {
+            let input = document.createElement('input');
+            input.setAttribute('type', 'checkbox');
+            input.setAttribute('id', 'ttableInputFor' + prop.getSymbol() + 'row' + i);
+            input.setAttribute('disabled', 'true');
+            let data = document.createElement('td');
+            data.appendChild(input);
+            newTable.childNodes[1 + i].appendChild(data);
+        }
+    });
+    exprs.reverse();
+    let i = 0;
+    exprs.forEach((expr) => {
+        let header = document.createElement('th');
+        header.textContent = expr.toString();
+        newTable.firstChild.appendChild(header);
+        for (let q = 0; q < Math.pow(2, props.length); q++) {
+            let data = document.createElement('td');
+            let content = document.createElement('p');
+            content.setAttribute('id', 'ttableExprDisplay' + i + 'row' + q);
+            data.appendChild(content);
+            newTable.childNodes[1 + q].appendChild(data);
+        }
+        i++;
+    });
+    document.getElementById('truthTableDiv').appendChild(newTable);
+    }
+}
+
 /** Function to generate the plug-in table for the current expression. */
 function generatePlugInTable() {
     let props = [];
@@ -227,6 +290,9 @@ function generatePlugInTable() {
         } else {
             props.push(head);
         }
+    }
+    while (document.getElementById('truthTableDiv').firstChild != null) {
+        document.getElementById('truthTableDiv').removeChild(document.getElementById('truthTableDiv').firstChild);
     }
     while (document.getElementById('pluginValDiv').firstChild != null) {
         document.getElementById('pluginValDiv').removeChild(document.getElementById('pluginValDiv').firstChild)
