@@ -273,6 +273,28 @@ function generateTruthTable() {
         i++;
     });
     document.getElementById('truthTableDiv').appendChild(newTable);
+    let counters = [];
+    let maximums = [];
+    let current = [];
+    let startVal = Math.pow(2, props.length);
+    props.forEach(() => {
+        counters.push(0);
+        maximums.push(startVal /= 2);
+        current.push(true);
+    });
+    for (let i = 0; i < Math.pow(2, props.length); i++) {
+        for (let q = 0; q < props.length; q++) {
+            if (counters[q] >= maximums[q]) {
+                counters[q] = 0;
+                current[q] = !current[q];
+            }
+            document.getElementById(`ttableInputFor${props[q].getSymbol()}row${i}`).checked = current[q];
+            props[q].setValue(current[q]);
+            counters[q]++;
+        }
+        for (let q = 0; q < exprs.length; q++) {
+            document.getElementById(`ttableExprDisplay${q}row${i}`).textContent = exprs[q].evaluate();
+        }
     }
 }
 
