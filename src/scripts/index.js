@@ -218,6 +218,9 @@ function generateExpression() {
 
 /** Function to generate the truth table for the current expression. */
 function generateTruthTable() {
+    if (legalExpression) {
+        generateExpression();
+    }
     while (document.getElementById('pluginValDiv').firstChild != null) {
         document.getElementById('pluginValDiv').removeChild(document.getElementById('pluginValDiv').firstChild);
     }
@@ -234,7 +237,15 @@ function generateTruthTable() {
             stack.push(head.getRight());
             exprs.push(head);
         } else {
-            props.push(head);
+            let duplicate = false;
+            props.forEach((testProp) => {
+                if(testProp.getSymbol() == head.getSymbol()){
+                    duplicate = true;
+                }
+            });
+            if(!duplicate){
+                props.push(head);
+            }
         }
     }
     let newTable = document.createElement('table');
@@ -300,6 +311,9 @@ function generateTruthTable() {
 
 /** Function to generate the plug-in table for the current expression. */
 function generatePlugInTable() {
+    if (legalExpression) {
+        generateExpression();
+    }
     let props = [];
     let exprs = [];
     let stack = [currentExpression];
@@ -310,9 +324,18 @@ function generatePlugInTable() {
             stack.push(head.getRight());
             exprs.push(head);
         } else {
-            props.push(head);
+            let duplicate = false;
+            props.forEach((testProp) => {
+                if(testProp.getSymbol() == head.getSymbol()){
+                    duplicate = true;
+                }
+            });
+            if(!duplicate){
+                props.push(head);
+            }
         }
     }
+    console.log(props);
     while (document.getElementById('truthTableDiv').firstChild != null) {
         document.getElementById('truthTableDiv').removeChild(document.getElementById('truthTableDiv').firstChild);
     }
