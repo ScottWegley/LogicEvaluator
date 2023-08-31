@@ -42,3 +42,8 @@ div#truthTableDiv {
 div#devDiv {
     display: none;
 }
+
+.symbolToCopy {
+    width: 15px;
+    text-align: center;
+}

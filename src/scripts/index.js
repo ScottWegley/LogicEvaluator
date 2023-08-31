@@ -27,14 +27,6 @@ function injectScripts() {
         ev.preventDefault();
     });
 
-    /** Keep {@link lastCursorIndex} updated */
-    document.getElementById('exprText').addEventListener('selectionchange', () => {
-        setTimeout(() => {
-            lastCursorIndex = document.getElementById('exprText').selectionStart;
-            document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
-        }, 10);
-    });
-
     /** Mark new expressions as automatically illegal to require reverification. Update character counts. */
     document.getElementById('exprText').addEventListener('keydown', (ev) => {
         setTimeout(() => {
@@ -53,46 +45,12 @@ function injectScripts() {
     document.getElementById('plugInBtn').addEventListener('click', () => {
         generatePlugInTable();
     });
-
-    /** Handles inserting special characters into the expression. */
-    document.getElementById('negateBtn').addEventListener('click', () => {
-        insertCharIntoExpr('~');
-    });
-    document.getElementById('andBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operation.And.description);
-    });
-    document.getElementById('orBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operation.Or.description);
-    });
-    document.getElementById('ifBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operation.If.description);
-    });
-    document.getElementById('iffBtn').addEventListener('click', () => {
-        insertCharIntoExpr(Operation.Iff.description);
-    });
 }
 
 /** Function to check the legality of the user's inputted expression. If it's legal, switch the app state.*/
 function verifyUserInput() {
-    encloseExpression();
     checkCharacters();
     updateAppState();
-}
-
-/** Encloses the expression in parenthesis if it is not already enclosed */
-function encloseExpression() {
-    let userInput = document.getElementById('exprText').value;
-    if ((userInput.indexOf("(") == 0 || userInput.indexOf("~(") == 0) && userInput.lastIndexOf(")") == userInput.length - 1) {
-        return;
-    }
-    if (userInput.charAt(userInput.length - 1) != ')') {
-        document.getElementById('exprText').value = `${userInput})`;
-    }
-    if (userInput.charAt(0) != '(' || userInput.charAt(0) != '~') {
-        document.getElementById('exprText').value = `(${userInput}`;
-    }
-    document.getElementById('exprText').setAttribute('size', document.getElementById('exprText').value.length);
-    return;
 }
 
 /**
@@ -192,15 +150,6 @@ const ErrorType = {
     MiscInvalidError: Symbol("miscInvalidError")
 }
 
-/** Function to insert a character into the expression at the last location of the cursor. */
-function insertCharIntoExpr(char) {
-    document.getElementById('exprText').value = document.getElementById('exprText').value.substring(0, lastCursorIndex) + char + document.getElementById('exprText').value.substring(lastCursorIndex);
-    lastCursorIndex++;
-    document.getElementById('cursIndxLbl').textContent = "Index: " + lastCursorIndex.toString();
-    document.getElementById('exprText').focus();
-    document.getElementById('exprText').setSelectionRange(lastCursorIndex, lastCursorIndex);
-    verifyUserInput();
-}
 
 /** Function to alter UI elements based on interal flags. */
 function updateAppState() {
